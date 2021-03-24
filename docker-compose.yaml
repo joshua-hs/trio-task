@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  flask-app:
+    container_name: trio-flask-app
+    image: flask-app:latest
+    build: ./flask-app
+    ports:
+      - target: 5000
+        published: 5000
+    depends_on:
+      - "database"
+  database:
+    container_name: mysql
+    image: mysql:latest
+    build: ./db
+  nginx:
+    container_name: trio-nginx
+    image: nginx:latest
+    ports:
+      - target: 80
+        published: 80
+    volumes:
+      - type: bind
+        source: ./nginx/nginx.conf
+        target: /etc/nginx/nginx.conf
